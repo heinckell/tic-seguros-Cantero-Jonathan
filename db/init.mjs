@@ -14,7 +14,14 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 // Para inicializar siempre usamos el archivo local, aunque exista Turso
 // configurado: este script se corre una vez desde la compu del desarrollador
 // para generar seguros.db, que después se sube/migra a Turso (ver README).
-const db = createClient({ url: "file:" + join(__dirname, "..", "seguros.db") });
+// Si se definen TURSO_DATABASE_URL y TURSO_AUTH_TOKEN en la terminal, el
+// mismo script crea las tablas y carga los datos directamente en Turso.
+const db = process.env.TURSO_DATABASE_URL
+  ? createClient({
+      url: process.env.TURSO_DATABASE_URL,
+      authToken: process.env.TURSO_AUTH_TOKEN,
+    })
+  : createClient({ url: "file:" + join(__dirname, "..", "seguros.db") });
 
 async function run() {
   console.log("1) Creando tablas desde schema.sql...");
