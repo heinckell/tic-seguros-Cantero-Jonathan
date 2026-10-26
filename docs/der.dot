@@ -1,0 +1,78 @@
+// DER - Sistema Web de Seguros de Accidentes Personales
+// Entidades con sus atributos, PK subrayada, FK marcada.
+digraph DER {
+  rankdir=LR;
+  bgcolor="white";
+  node [shape=plaintext, fontname="Helvetica", fontsize=11];
+  edge [fontname="Helvetica", fontsize=10, color="#555555"];
+
+  cliente [label=<
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="4">
+      <tr><td bgcolor="#1e3a5f"><font color="white"><b>cliente</b></font></td></tr>
+      <tr><td align="left"><u>id_cliente</u> (PK)</td></tr>
+      <tr><td align="left">nombre</td></tr>
+      <tr><td align="left">apellido</td></tr>
+      <tr><td align="left">dni (UNIQUE)</td></tr>
+      <tr><td align="left">email</td></tr>
+      <tr><td align="left">telefono</td></tr>
+    </table>
+  >];
+
+  poliza [label=<
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="4">
+      <tr><td bgcolor="#1e3a5f"><font color="white"><b>poliza</b></font></td></tr>
+      <tr><td align="left"><u>id_poliza</u> (PK)</td></tr>
+      <tr><td align="left">numero_poliza (UNIQUE)</td></tr>
+      <tr><td align="left">id_cliente (FK)</td></tr>
+      <tr><td align="left">fecha_inicio</td></tr>
+      <tr><td align="left">fecha_fin</td></tr>
+      <tr><td align="left">estado</td></tr>
+    </table>
+  >];
+
+  cobertura [label=<
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="4">
+      <tr><td bgcolor="#1e3a5f"><font color="white"><b>cobertura</b></font></td></tr>
+      <tr><td align="left"><u>id_cobertura</u> (PK)</td></tr>
+      <tr><td align="left">nombre</td></tr>
+      <tr><td align="left">descripcion</td></tr>
+    </table>
+  >];
+
+  poliza_cobertura [label=<
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="4">
+      <tr><td bgcolor="#2e8b57"><font color="white"><b>poliza_cobertura</b></font></td></tr>
+      <tr><td align="left"><u>id_poliza</u> (PK, FK)</td></tr>
+      <tr><td align="left"><u>id_cobertura</u> (PK, FK)</td></tr>
+    </table>
+  >];
+
+  siniestro [label=<
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="4">
+      <tr><td bgcolor="#1e3a5f"><font color="white"><b>siniestro</b></font></td></tr>
+      <tr><td align="left"><u>id_siniestro</u> (PK)</td></tr>
+      <tr><td align="left">id_poliza (FK)</td></tr>
+      <tr><td align="left">fecha</td></tr>
+      <tr><td align="left">tipo</td></tr>
+      <tr><td align="left">descripcion</td></tr>
+      <tr><td align="left">estado</td></tr>
+    </table>
+  >];
+
+  pago [label=<
+    <table border="1" cellborder="0" cellspacing="0" cellpadding="4">
+      <tr><td bgcolor="#1e3a5f"><font color="white"><b>pago</b></font></td></tr>
+      <tr><td align="left"><u>id_pago</u> (PK)</td></tr>
+      <tr><td align="left">id_poliza (FK)</td></tr>
+      <tr><td align="left">fecha</td></tr>
+      <tr><td align="left">importe</td></tr>
+      <tr><td align="left">estado</td></tr>
+    </table>
+  >];
+
+  cliente -> poliza [label="1 : N", arrowhead=crow, arrowtail=none, dir=both];
+  poliza -> siniestro [label="1 : N", arrowhead=crow, arrowtail=none, dir=both];
+  poliza -> pago [label="1 : N", arrowhead=crow, arrowtail=none, dir=both];
+  poliza -> poliza_cobertura [label="1 : N", arrowhead=crow, arrowtail=none, dir=both];
+  cobertura -> poliza_cobertura [label="1 : N", arrowhead=crow, arrowtail=none, dir=both];
+}

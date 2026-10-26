@@ -1,0 +1,135 @@
+
+[1] 1. Mostrar todos los clientes.
+  SQL: SELECT * FROM cliente
+  id_cliente | nombre | apellido | dni | email | telefono
+  1 | Lucía | Gómez | 30111222 | lucia.gomez@mail.com | 11-4455-1001
+  2 | Martín | Pereyra | 28555666 | martin.pereyra@mail.com | 11-4455-1002
+  3 | Ana | Acosta | 33222111 | ana.acosta@mail.com | 11-4455-1003
+  4 | Diego | Fernández | 27888999 | diego.fernandez@mail.com | 11-4455-1004
+  5 | Rocío | Alvarez | 35444333 | rocio.alvarez@mail.com | 11-4455-1005
+  6 | Facundo | Medina | 31777888 | facundo.medina@mail.com | 11-4455-1006
+  7 | Valentina | Rojas | 36000111 | valentina.rojas@mail.com | 11-4455-1007
+  8 | Ignacio | Torres | 29333444 | ignacio.torres@mail.com | 11-4455-1008
+  9 | Camila | Aguirre | 34222555 | camila.aguirre@mail.com | 11-4455-1009
+  10 | Santiago | Juárez | 32666777 | santiago.juarez@mail.com | 11-4455-1010
+
+[2] 2. Ordenar clientes alfabéticamente por apellido.
+  SQL: SELECT * FROM cliente ORDER BY apellido ASC
+  id_cliente | nombre | apellido | dni | email | telefono
+  3 | Ana | Acosta | 33222111 | ana.acosta@mail.com | 11-4455-1003
+  9 | Camila | Aguirre | 34222555 | camila.aguirre@mail.com | 11-4455-1009
+  5 | Rocío | Alvarez | 35444333 | rocio.alvarez@mail.com | 11-4455-1005
+  4 | Diego | Fernández | 27888999 | diego.fernandez@mail.com | 11-4455-1004
+  1 | Lucía | Gómez | 30111222 | lucia.gomez@mail.com | 11-4455-1001
+  10 | Santiago | Juárez | 32666777 | santiago.juarez@mail.com | 11-4455-1010
+  6 | Facundo | Medina | 31777888 | facundo.medina@mail.com | 11-4455-1006
+  2 | Martín | Pereyra | 28555666 | martin.pereyra@mail.com | 11-4455-1002
+  7 | Valentina | Rojas | 36000111 | valentina.rojas@mail.com | 11-4455-1007
+  8 | Ignacio | Torres | 29333444 | ignacio.torres@mail.com | 11-4455-1008
+
+[3] 3. Buscar clientes cuyo apellido comience con A.
+  SQL: SELECT * FROM cliente WHERE apellido LIKE 'A%'
+  id_cliente | nombre | apellido | dni | email | telefono
+  3 | Ana | Acosta | 33222111 | ana.acosta@mail.com | 11-4455-1003
+  5 | Rocío | Alvarez | 35444333 | rocio.alvarez@mail.com | 11-4455-1005
+  9 | Camila | Aguirre | 34222555 | camila.aguirre@mail.com | 11-4455-1009
+
+[4] 4. Buscar una póliza por número.
+  SQL: SELECT * FROM poliza WHERE numero_poliza = 'POL-2025-0001'
+  id_poliza | numero_poliza | id_cliente | fecha_inicio | fecha_fin | estado
+  1 | POL-2025-0001 | 1 | 2025-02-01 | 2026-02-01 | ACTIVA
+
+[5] 5. Contar la cantidad de clientes.
+  SQL: SELECT COUNT(*) AS cantidad_clientes FROM cliente
+  cantidad_clientes
+  10
+
+[6] 6. Contar la cantidad de pólizas activas.
+  SQL: SELECT COUNT(*) AS polizas_activas FROM poliza WHERE estado = 'ACTIVA'
+  polizas_activas
+  8
+
+[7] 7. Contar la cantidad de siniestros.
+  SQL: SELECT COUNT(*) AS cantidad_siniestros FROM siniestro
+  cantidad_siniestros
+  10
+
+[8] 8. Calcular el promedio de pagos.
+  SQL: SELECT ROUND(AVG(importe), 2) AS promedio_pagos FROM pago
+  promedio_pagos
+  14266.67
+
+[9] JOIN 1: Cliente + Póliza Para cada póliza, mostrar el nombre completo del cliente dueño.
+  SQL: SELECT p.numero_poliza, c.nombre || ' ' || c.apellido AS cliente, c.dni, p.fecha_inicio, p.fecha_fin, p.estado FROM poliza p JOIN cliente c ON p.id_cliente = c.id_cliente ORDER BY p.numero_poliza
+  numero_poliza | cliente | dni | fecha_inicio | fecha_fin | estado
+  POL-2024-0003 | Ana Acosta | 33222111 | 2024-06-01 | 2025-06-01 | VENCIDA
+  POL-2024-0006 | Facundo Medina | 31777888 | 2024-09-01 | 2025-09-01 | CANCELADA
+  POL-2025-0001 | Lucía Gómez | 30111222 | 2025-02-01 | 2026-02-01 | ACTIVA
+  POL-2025-0002 | Martín Pereyra | 28555666 | 2025-03-15 | 2026-03-15 | ACTIVA
+  POL-2025-0004 | Diego Fernández | 27888999 | 2025-05-10 | 2026-05-10 | ACTIVA
+  POL-2025-0005 | Rocío Alvarez | 35444333 | 2025-07-20 | 2026-07-20 | ACTIVA
+  POL-2025-0007 | Valentina Rojas | 36000111 | 2025-08-05 | 2026-08-05 | ACTIVA
+  POL-2025-0008 | Ignacio Torres | 29333444 | 2025-09-12 | 2026-09-12 | ACTIVA
+  POL-2025-0009 | Camila Aguirre | 34222555 | 2025-01-10 | 2026-01-10 | ACTIVA
+  POL-2025-0010 | Santiago Juárez | 32666777 | 2025-10-01 | 2026-10-01 | ACTIVA
+
+[10] JOIN 2: Póliza + Siniestro Para cada siniestro, mostrar a qué póliza pertenece.
+  SQL: SELECT s.id_siniestro, p.numero_poliza, s.fecha, s.tipo, s.descripcion, s.estado FROM siniestro s JOIN poliza p ON s.id_poliza = p.id_poliza ORDER BY s.fecha
+  id_siniestro | numero_poliza | fecha | tipo | descripcion | estado
+  7 | POL-2025-0009 | 2025-02-14 | Golpe deportivo | Lesión de rodilla practicando running. | CERRADO
+  1 | POL-2025-0001 | 2025-04-12 | Caída | Caída en la vía pública, fractura de muñeca. | CERRADO
+  2 | POL-2025-0002 | 2025-05-03 | Accidente de tránsito | Choque en moto, golpe en la pierna. | CERRADO
+  3 | POL-2025-0004 | 2025-06-18 | Golpe deportivo | Esguince de tobillo jugando al fútbol. | ABIERTO
+  10 | POL-2025-0004 | 2025-07-11 | Quemadura | Quemadura con agua caliente. | CERRADO
+  4 | POL-2025-0005 | 2025-08-02 | Caída | Caída en escalera del trabajo. | ABIERTO
+  5 | POL-2025-0007 | 2025-08-22 | Quemadura | Quemadura leve en la cocina de su casa. | CERRADO
+  6 | POL-2025-0008 | 2025-09-20 | Accidente de tránsito | Caída de la bicicleta, golpe en el hombro. | ABIERTO
+  8 | POL-2025-0001 | 2025-09-30 | Caída | Nueva caída, golpe en la cadera. | ABIERTO
+  9 | POL-2025-0010 | 2025-10-05 | Accidente de tránsito | Accidente como peatón, policontusiones leves. | ABIERTO
+
+[11] JOIN 3: Cliente + Póliza + Siniestro El reporte completo: qué cliente tuvo qué siniestro, en qué póliza.
+  SQL: SELECT c.nombre || ' ' || c.apellido AS cliente, p.numero_poliza, s.fecha, s.tipo, s.estado AS estado_siniestro FROM siniestro s JOIN poliza p ON s.id_poliza = p.id_poliza JOIN cliente c ON p.id_cliente = c.id_cliente ORDER BY s.fecha
+  cliente | numero_poliza | fecha | tipo | estado_siniestro
+  Camila Aguirre | POL-2025-0009 | 2025-02-14 | Golpe deportivo | CERRADO
+  Lucía Gómez | POL-2025-0001 | 2025-04-12 | Caída | CERRADO
+  Martín Pereyra | POL-2025-0002 | 2025-05-03 | Accidente de tránsito | CERRADO
+  Diego Fernández | POL-2025-0004 | 2025-06-18 | Golpe deportivo | ABIERTO
+  Diego Fernández | POL-2025-0004 | 2025-07-11 | Quemadura | CERRADO
+  Rocío Alvarez | POL-2025-0005 | 2025-08-02 | Caída | ABIERTO
+  Valentina Rojas | POL-2025-0007 | 2025-08-22 | Quemadura | CERRADO
+  Ignacio Torres | POL-2025-0008 | 2025-09-20 | Accidente de tránsito | ABIERTO
+  Lucía Gómez | POL-2025-0001 | 2025-09-30 | Caída | ABIERTO
+  Santiago Juárez | POL-2025-0010 | 2025-10-05 | Accidente de tránsito | ABIERTO
+
+[12] Pólizas por estado (gráfico 1)
+  SQL: SELECT estado, COUNT(*) AS cantidad FROM poliza GROUP BY estado
+  estado | cantidad
+  ACTIVA | 8
+  CANCELADA | 1
+  VENCIDA | 1
+
+[13] Siniestros por tipo (gráfico 2)
+  SQL: SELECT tipo, COUNT(*) AS cantidad FROM siniestro GROUP BY tipo ORDER BY cantidad DESC
+  tipo | cantidad
+  Caída | 3
+  Accidente de tránsito | 3
+  Quemadura | 2
+  Golpe deportivo | 2
+
+[14] Siniestros por mes (gráfico 3)
+  SQL: SELECT strftime('%Y-%m', fecha) AS mes, COUNT(*) AS cantidad FROM siniestro GROUP BY mes ORDER BY mes
+  mes | cantidad
+  2025-02 | 1
+  2025-04 | 1
+  2025-05 | 1
+  2025-06 | 1
+  2025-07 | 1
+  2025-08 | 2
+  2025-09 | 2
+  2025-10 | 1
+
+[15] Siniestros abiertos / cerrados (tarjetas del dashboard)
+  SQL: SELECT estado, COUNT(*) AS cantidad FROM siniestro GROUP BY estado
+  estado | cantidad
+  ABIERTO | 5
+  CERRADO | 5
